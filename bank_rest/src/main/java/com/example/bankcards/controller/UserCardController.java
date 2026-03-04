@@ -2,8 +2,10 @@ package com.example.bankcards.controller;
 
 
 import com.example.bankcards.dto.CardDto.CardDto;
-import com.example.bankcards.dto.TransferDto.TransferRequest;
-import com.example.bankcards.entity.Transfer;
+import com.example.bankcards.dto.TransferDto.TransferDto;
+import com.example.bankcards.dto.TransferDto.TransferCreateRequest;
+import com.example.bankcards.entity.BlockRequest;
+import com.example.bankcards.service.TransferService;
 import com.example.bankcards.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,39 +15,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user/cards")
+@RequestMapping("/user/{userId}/cards")
 @RequiredArgsConstructor
 public class UserCardController {
     private final UserService userService;
+    private final TransferService transferService;
 
 
-    @GetMapping
-    public ResponseEntity<List<CardDto>> getCards() {
-        List<CardDto> card = userService.getCards();
+    @GetMapping()  // ПРОВЕРКА: +
+    public ResponseEntity<List<CardDto>> getCards(@PathVariable int userId) {
+        List<CardDto> card = userService.getCards(userId);
         return new ResponseEntity<>(card, HttpStatus.OK);
     }
 
-    @GetMapping("/{cardId}")
+    @GetMapping("/{cardId}") // ПРОВЕРКА: +
     public ResponseEntity<CardDto> getCard(@PathVariable int cardId) {
         CardDto card = userService.getCard(cardId);
         return new ResponseEntity<>(card, HttpStatus.OK);
     }
 
-    @PostMapping("/{cardId}/block")
-    public ResponseEntity<Void> requestBlock(@PathVariable int id) {
-        userService.requestBlock(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PostMapping("/{cardId}/block") // ПРОВЕРКА: +
+    public ResponseEntity<BlockRequest> createRequestBlock(@PathVariable int userId, @PathVariable int cardId) {
+        BlockRequest blockRequest = userService.requestBlock(cardId, userId);
+        return new ResponseEntity<>(blockRequest, HttpStatus.CREATED);
     }
 
-    @PostMapping("/transfer")
-    public ResponseEntity<Transfer> transfer(@RequestBody TransferRequest transfer) {
-        Transfer newTransfer = userService.transfer(transfer);
-        return new ResponseEntity<>(newTransfer, HttpStatus.OK);
+    @PostMapping("/transfer") // ПРОВЕРКА: +
+    public ResponseEntity<TransferDto> transfer(@RequestBody TransferCreateRequest transfer) {
+        TransferDto transferDto = transferService.transfer(transfer);
+        return new ResponseEntity<>(transferDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/balance")
-    public ResponseEntity<Float> getBalance() {
-        Float balance = userService.getBalance();
+    @GetMapping("/balance/{cardId}") //ПРОВЕРКА: +
+    public ResponseEntity<Double> getBalance(@PathVariable int cardId) {
+        double balance = userService.getBalance(cardId);
         return new ResponseEntity<>(balance, HttpStatus.OK);
     }
 

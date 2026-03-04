@@ -1,5 +1,22 @@
 package com.example.bankcards.dto.CardDto;
 
-public class CardDto {
+import lombok.*;
 
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+public class CardDto {
+    private int id;
+
+    private String cardNumber;
+
+    private String cardHolder;
+
+    private LocalDate validityPeriod;
+
+    private String currency = "RUB";
 }
