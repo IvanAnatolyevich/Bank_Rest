@@ -21,11 +21,9 @@ public class Transfer {
     @Column
     private float amount;
     @Column
-    int fromCardId;
+    private int fromCardId;
     @Column
-    int toCardId;
-    @Column
-    private LocalDate date;
+    private int toCardId;
     @Column
     private String description;
     @Column

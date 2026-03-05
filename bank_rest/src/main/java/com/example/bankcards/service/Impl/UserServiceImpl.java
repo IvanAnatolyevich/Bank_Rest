@@ -11,6 +11,7 @@ import com.example.bankcards.repository.BlockeRequestRepository;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,10 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public BlockRequest requestBlock(int cardId, int userId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() ->
                 new NotFoundException("Карта с id " + cardId + " не найдена"));
-        if (!(card.getOwner().getId() == userId)) {
+        if (!(card.getUser().getId() == userId)) {
             throw new AccessDeniedException("Эта карта вам не принадлежит");
         }
         if (card.getStatus() == Status.BLOCKED) {
@@ -56,8 +58,8 @@ public class UserServiceImpl implements UserService {
 
 
         BlockRequest blockRequest = new BlockRequest();
-        blockRequest.setCard(card);
-        blockRequest.setRequestedBy(userId);
+        blockRequest.setCardId(cardId);
+        blockRequest.setUserId(userId);
         blockRequest.setRequestedAt(LocalDateTime.now());
         blockRequest.setBlockedStatus(BlockedStatus.PENDING);
         blockRequestRepository.save(blockRequest);

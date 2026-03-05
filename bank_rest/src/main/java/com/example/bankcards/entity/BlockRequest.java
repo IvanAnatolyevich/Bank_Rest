@@ -16,13 +16,14 @@ public class BlockRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="block_requests_id")
-    private int id;
+    private int blockRequestId;
     @Column
-    private Card card;
+    private int cardId;
     @Column
-    private int requestedBy;
+    private int userId;
     @Column
     private LocalDateTime requestedAt;
-    @Column
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private BlockedStatus blockedStatus;
 }

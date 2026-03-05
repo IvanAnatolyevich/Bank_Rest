@@ -7,7 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -20,7 +19,8 @@ public class User {
     private Integer id;
     @OneToMany(mappedBy = "user")
     private List<Card> cards;
-    @Column
+    @Column(name="role")
+    @Enumerated(EnumType.STRING)
     private Role role;
     @Column
     private String phone;

@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,19 +18,20 @@ public class Card {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User owner;
+    private User user;
     @Column
     private String cardNumber;
     @Column
     private String cardHolder;
     @Column
     private LocalDate validityPeriod;
-    @Column
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Column
     private double balance;
     @Column
-    private String currency = "RUB";
+    private String currency = "RUB"; // ПЕРЕДЕЛАТЬ НА ENUM
 
 
 }

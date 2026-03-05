@@ -18,31 +18,31 @@ public class AdminCardController {
     private final AdminService adminService;
 
 
-    @PostMapping("/cards/{userId}")
+    @PostMapping("/cards/{userId}") // ПРОВЕРКА: +
     public ResponseEntity<CardDto> createCard(@RequestBody CardCreateRequest cardCreateRequest) {
         CardDto cardDto = adminService.createCard(cardCreateRequest);
         return new ResponseEntity<>(cardDto, HttpStatus.CREATED);
     }
 
-    @PostMapping
+    @PostMapping // ПРОВЕРКА: +
     public ResponseEntity<UserDto> createUser(@RequestBody UserCreateRequest userCreateRequest) {
         UserDto userDto = adminService.createUser(userCreateRequest);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/cards/{cardId}/status")
+    @PutMapping("/cards/{cardId}/status") // ПРОВЕРКА:
     public ResponseEntity<CardDto> updateStatus(@PathVariable int cardId) {
         CardDto cardDto = adminService.updateStatus(cardId);
         return new ResponseEntity<>(cardDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/cards/{cardId}")
+    @DeleteMapping("/cards/{cardId}") // ПРОВЕРКА: +
     public ResponseEntity<Void> deleteCard(@PathVariable int cardId) {
         adminService.deleteCard(cardId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/block-requests")
+    @GetMapping("/block-requests") // ПРОВЕРКА: +
     public ResponseEntity<BlockRequest> getBlockRequests() {
         return null;
     }
