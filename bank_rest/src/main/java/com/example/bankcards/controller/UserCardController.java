@@ -48,7 +48,7 @@ public class UserCardController {
         return new ResponseEntity<>(transferResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/balance/{cardId}") //ПРОВЕРКА: 
+    @GetMapping("/balance/{cardId}") //ПРОВЕРКА:
     public ResponseEntity<Double> getBalance(@PathVariable int cardId) {
         double balance = userService.getBalance(cardId);
         return new ResponseEntity<>(balance, HttpStatus.OK);
