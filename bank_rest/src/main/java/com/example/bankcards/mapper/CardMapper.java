@@ -5,6 +5,7 @@ import com.example.bankcards.dto.CardDto.CardDto;
 import com.example.bankcards.dto.CardDto.CardResponse;
 import com.example.bankcards.entity.Card;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CardMapper {
@@ -12,5 +13,6 @@ public interface CardMapper {
 
     CardDto cardToCardDto(Card card);
 
+    @Mapping(target = "cardNumber", expression = "java(NumberCardMask.mask(card.getCardNumber()))")
     CardResponse cardToCardResponse(Card card);
 }
