@@ -1,7 +1,7 @@
 package com.example.bankcards.service.Impl;
 
-import com.example.bankcards.dto.TransferDto.TransferDto;
 import com.example.bankcards.dto.TransferDto.TransferCreateRequest;
+import com.example.bankcards.dto.TransferDto.TransferResponse;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.Status;
 import com.example.bankcards.entity.Transfer;
@@ -13,7 +13,6 @@ import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.TransferRepository;
 import com.example.bankcards.service.TransferService;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +21,10 @@ import org.springframework.stereotype.Service;
 public class TransferServiceImpl implements TransferService {
     private final CardRepository cardRepository;
     private final TransferRepository transferRepository;
+    private final TransferMapper transferMapper;
     @Override
     @Transactional
-    public TransferDto transfer(TransferCreateRequest transferRequest) {
+    public TransferResponse transfer(TransferCreateRequest transferRequest) {
         Card toCard = cardRepository.findById(transferRequest.getToCardId())
                 .orElseThrow(()-> new NotFoundException("Карта с id" + transferRequest.getToCardId() + " не найдена"));
         Card fromCard = cardRepository.findById(transferRequest.getFromCardId())
@@ -46,10 +46,10 @@ public class TransferServiceImpl implements TransferService {
         cardRepository.save(toCard);
 
 
-        Transfer transfer = TransferMapper.transferRequestToTransfer(transferRequest);
+        Transfer transfer = transferMapper.transferRequestToTransfer(transferRequest);
         transferRepository.save(transfer);
 
 
-        return TransferMapper.transferToTransferDto(transfer);
+        return transferMapper.transferToTransferResponse(transfer);
     }
 }

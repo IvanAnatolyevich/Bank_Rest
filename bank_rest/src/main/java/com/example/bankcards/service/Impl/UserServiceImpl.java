@@ -1,6 +1,6 @@
 package com.example.bankcards.service.Impl;
 
-import com.example.bankcards.dto.CardDto.CardDto;
+import com.example.bankcards.dto.CardDto.CardResponse;
 import com.example.bankcards.entity.*;
 import com.example.bankcards.exception.AccessDeniedException;
 import com.example.bankcards.exception.BlockRequestAlreadyExistsException;
@@ -25,18 +25,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CardRepository cardRepository;
     private final BlockeRequestRepository blockRequestRepository;
+    private final CardMapper cardMapper;
 
 
     @Override
-    public List<CardDto> getCards(int userId) {
-        return cardRepository.findByUserId(userId).stream().map(CardMapper::cardToCardDto).collect(Collectors.toList());
+    public List<CardResponse> getCards(int userId) {
+        return cardRepository.findByUserId(userId).stream().map((user) -> cardMapper.cardToCardResponse(user)).collect(Collectors.toList());
     }
 
     @Override
-    public CardDto getCard(int cardId) {
+    public CardResponse getCard(int cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() ->
                 new NotFoundException("Карта с id " + cardId + " не найдена"));
-        return CardMapper.cardToCardDto(card);
+        return cardMapper.cardToCardResponse(card);
     }
 
     @Override

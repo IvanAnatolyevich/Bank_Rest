@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardCreateRequest {
+public class CardResponse {
     private String cardNumber;
 
     private String cardHolder;

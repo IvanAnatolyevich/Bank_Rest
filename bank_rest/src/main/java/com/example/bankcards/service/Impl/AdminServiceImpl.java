@@ -1,11 +1,12 @@
 package com.example.bankcards.service.Impl;
 
 import com.example.bankcards.dto.CardDto.CardCreateRequest;
-import com.example.bankcards.dto.CardDto.CardDto;
+import com.example.bankcards.dto.CardDto.CardResponse;
 import com.example.bankcards.dto.UserDto.UserCreateRequest;
-import com.example.bankcards.dto.UserDto.UserDto;
+import com.example.bankcards.dto.UserDto.UserResponse;
 import com.example.bankcards.entity.BlockRequest;
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.StatusUpdateRequest;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.NotFoundException;
 import com.example.bankcards.mapper.CardMapper;
@@ -25,17 +26,23 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final BlockeRequestRepository blockeRequestRepository;
     private final CardRepository cardRepository;
+    private final CardMapper cardMapper;
+    private final UserMapper userMapper;
 
     @Override
-    public CardDto createCard(CardCreateRequest cardCreateRequest) {
-        Card card = CardMapper.cardRequestToCard(cardCreateRequest);
+    public CardResponse createCard(CardCreateRequest cardCreateRequest) {
+        Card card = cardMapper.cardRequestToCard(cardCreateRequest);
         cardRepository.save(card);
-        return CardMapper.cardToCardDto(card);
+        return cardMapper.cardToCardResponse(card);
     }
 
     @Override
-    public CardDto updateStatus(int id) {
-        return null;
+    public CardResponse updateStatus(int cardId, StatusUpdateRequest statusUpdateRequest) {
+        Card card = cardRepository.findById(cardId).
+                orElseThrow(()-> new NotFoundException("Карта с id " + cardId + " не найдена"));
+        card.setStatus(statusUpdateRequest.getStatus());
+        cardRepository.save(card);
+        return cardMapper.cardToCardResponse(card);
     }
 
     @Override
@@ -51,10 +58,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public UserDto createUser(UserCreateRequest userCreateRequest) {
-        User user = UserMapper.userRequestToUser(userCreateRequest);
+    public UserResponse createUser(UserCreateRequest userCreateRequest) {
+        User user = userMapper.userRequestToUser(userCreateRequest);
         userRepository.save(user);
-        return UserMapper.userToUserDto(user);
+        return userMapper.userToUserResponse(user);
     }
 
 }

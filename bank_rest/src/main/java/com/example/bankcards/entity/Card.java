@@ -31,7 +31,8 @@ public class Card {
     @Column
     private double balance;
     @Column
-    private String currency = "RUB"; // ПЕРЕДЕЛАТЬ НА ENUM
+    @Enumerated(EnumType.STRING)
+    private Currency currency = Currency.RUB;
 
 
 }
